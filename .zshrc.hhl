@@ -1,0 +1,305 @@
+# Path to your oh-my-zsh installation.
+  export ZSH=~/.oh-my-zsh
+
+# install oh-my-zsh if not already installed
+if ! [ -e ~/.oh-my-zsh/oh-my-zsh.sh ]; then
+  rm -rf ~/.oh-my-zsh
+  if ! command -v zsh >/dev/null 2>&1; then
+    printf "Zsh is not installed! Please install zsh first!\n"
+    exit
+  fi
+
+  umask g-w,o-w
+
+  printf "Cloning Oh My Zsh...\n"
+  command -v git >/dev/null 2>&1 || {
+    echo "Error: git is not installed"
+    exit 1
+  }
+
+  env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+    printf "Error: git clone of oh-my-zsh repo failed\n"
+    exit 1
+  }
+
+  # If this user's login shell is not already "zsh", attempt to switch.
+  TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
+  if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
+    # If this platform provides a "chsh" command (not Cygwin), do it, man!
+    if hash chsh >/dev/null 2>&1; then
+      printf "Time to change your default shell to zsh!\n"
+      chsh -s $(grep /zsh$ /etc/shells | tail -1)
+    # Else, suggest the user do so manually.
+    else
+      printf "I can't change your shell automatically because this system does not have chsh.\n"
+      printf "Please manually change your default shell to zsh!\n"
+    fi
+  fi
+
+  echo '         __                                     __   '
+  echo '  ____  / /_     ____ ___  __  __   ____  _____/ /_  '
+  echo ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
+  echo '/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '
+  echo '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
+  echo '                        /____/                       ....is now installed!'
+  echo ''
+  echo ''
+  echo 'Please look over the ~/.zshrc file to select plugins, themes, and options.'
+  echo ''
+  echo 'p.s. Follow us at https://twitter.com/ohmyzsh.'
+  echo ''
+  echo 'p.p.s. Get stickers and t-shirts at https://shop.planetargon.com.'
+  echo ''
+
+  ~/.../bin/... install
+#else
+#  echo "ohmyzsh is installed";
+fi
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+export POWERLEVEL9K_MODE="nerdfont-complete"
+export POWERLEVEL9K_IGNORE_TERM_COLORS=false
+DEFAULT_USER=kim
+#if [[ "$USER" == "kim" ]] || [[ "$USER" == "brose" ]] || [[ "$USER" == "admin" ]]; then
+    ZSH_THEME="powerlevel9k" # kim's theme
+#else
+#    ZSH_THEME="bira" # other's theme
+#fi
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+HIST_STAMPS="yyyy-mm-dd"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+EXTENDED_GLOB="true"
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+#plugins=()
+
+# official
+# wd = warp directory (cd "aliases)
+plugins=(
+systemd
+#tmux
+colored-man-pages
+wd
+pyenv
+#pip
+#wakeonlan
+)
+
+# custom plugins
+# zsh-nvm = node version manager; should work automatically, enable only when required
+plugins+=(
+git
+#private
+rsync
+#wttr
+zsh-autosuggestions
+zsh-syntax-highlighting
+#zsh-nvm
+)
+
+# distro dependend plugins
+if [ -f /etc/os-release ]; then
+    # freedesktop.org and systemd
+    . /etc/os-release
+    OS=$NAME
+fi
+
+POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="yellow"
+
+if [[ $OS = *("Arch"|"Manjaro")* ]]; then
+  plugins+=(archlinux)
+  if command -v yaourt 2>/dev/null; then
+    alias yolo='yaourt -Syu --aur --noconfirm'
+  else
+    alias yolo='yay -Syu --nocleanmenu --noeditmenu --nodiffmenu --noupgrademenu'
+  fi
+  alias pacman="sudo pacman --color always"
+  POWERLEVEL9K_LINUX_ICON='%F{cyan}\uf303%f'
+  POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="cyan"
+  if [[ $OS = *("Manjaro")* ]]; then
+    POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="green"
+    POWERLEVEL9K_LINUX_ICON='%F{green}\uf312%f'
+  fi
+elif [[ $OS = *("Debian"|"Ubuntu"|"Raspbian")* ]]; then
+  alias yolo='sudo apt update && sudo apt upgrade'
+  plugins+=()
+  POWERLEVEL9K_LINUX_ICON='%F{red}\ue77d%f'
+#  POWERLEVEL9K_LINUX_ICON='%F{red}\uf306%f'
+  POWERLEVEL9K_OS_ICON_BACKGROUND="white"
+  POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="088"
+  POWERLEVEL9K_CUSTOM_HOST_FOREGROUND="white"
+  if [[ $OS = *("Ubuntu")* ]]; then
+    POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="90"
+    POWERLEVEL9K_LINUX_ICON='%F{90}\uf31b%f'
+  fi
+  if [[ $OS = *("Raspbian")* ]]; then
+    POWERLEVEL9K_OS_ICON_BACKGROUND="233"
+    POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="089"
+    POWERLEVEL9K_LINUX_ICON='%F{201}\uf315%f'
+  fi
+elif [[ $OS = *("CentOS")* ]]; then
+  alias yolo='sudo yum update'
+  POWERLEVEL9K_LINUX_ICON='%F{127}\uf304%f'
+  POWERLEVEL9K_OS_ICON_BACKGROUND="154"
+  POWERLEVEL9K_CUSTOM_HOST_BACKGROUND="214"
+  POWERLEVEL9K_CUSTOM_HOST_FOREGROUND="57"
+fi
+
+# GUI?
+if xhost >& /dev/null ; then X_PRESENT=1; fi
+
+if [ -z ${SSH_TTY+x} ] && [[ $X_PRESENT -eq 1 ]]; then
+    IS_GUI=1;
+fi
+
+if [[ $IS_GUI -eq 1 ]]; then
+    plugins+=(sublime)
+fi
+
+# User configuration
+
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/golang" ] ; then
+    export GOPATH="~/golang"
+    PATH="$GOPATH/bin:$PATH"
+fi
+
+# export PATH="/usr/lib/hardening-wrapper/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+source $ZSH/oh-my-zsh.sh
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# less can read gzipped
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# https://unix.stackexchange.com/questions/111899/how-to-strip-color-codes-out-of-stdout-and-pipe-to-file-and-stdout
+alias stripcolors='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+alias fd="noglob fd"
+alias ...="~/.../bin/..."
+alias sni="import png:- | xclip -selection c -t image/png"
+
+# sudo can resolve alias:
+alias sudo="sudo "
+
+function hostname_icon(){
+    case $(cat /etc/hostname) in
+        'clavius')
+             echo '\uf186'
+        ;;
+        'manjolith'|'archies')
+             echo '\uf109'
+        ;;
+        'daringdo')
+             echo '\ue25f'
+        ;;
+        'v-arch')
+             echo '\ufab1'
+        ;;
+        *)
+             cat /etc/hostname
+        ;;
+    esac
+}
+
+# Theme config
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+#POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{green}\uf155%f "
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon custom_host user dir dir_writable virtualenv vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
+
+POWERLEVEL9K_DIR_HOME_FOREGROUND='007'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='007'
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='007'
+POWERLEVEL9K_DIR_HOME_BACKGROUND='017'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='017'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='017'
+#POWERLEVEL9K_VCS_CLEAN_FOREGROUND=''
+#POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=''
+#POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=''
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND='028'
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='006'
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='003'
+POWERLEVEL9K_USER_DEFAULT_BACKGROUND='232'
+POWERLEVEL9K_CUSTOM_HOST="hostname_icon"
+POWERLEVEL9K_SHOW_CHANGESET=true
+POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
+
+export VISUAL=nano
+
+#export CC=/usr/lib/hardening-wrapper/bin/clang
+#export CXX=/usr/lib/hardening-wrapper/bin/clang++
+
