@@ -6,7 +6,7 @@
 cd ~
 
 #install basic dependencies
-sudo yum install -y zsh git curl util-linux-user
+sudo yum install -y zsh git curl util-linux-user nano
 
 #install ohmyzsh
 cp -r ~/zshsetup/.oh-my-zsh ~/.oh-my-zsh
