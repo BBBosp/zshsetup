@@ -31,8 +31,8 @@ echo "bring in preferred config"
 cp ~/zshsetup/.zshrc ~/.zshrc
 
 #clone nerdfonts repo... This will take a while, it's a big repo, and seeds slowly.
-echo "getting nerdfonts, this grabs all because I'm lazy, just wait for it."
-git clone https://github.com/ryanoasis/nerd-fonts
+#echo "getting nerdfonts, this grabs all because I'm lazy, just wait for it."
+#git clone https://github.com/ryanoasis/nerd-fonts
 
 #run install script for nerd fonts
 echo "installing nerdfonts"
