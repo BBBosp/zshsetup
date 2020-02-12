@@ -131,3 +131,8 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=( os_icon host user dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time root_indicator background_jobs history)
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='green'
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='grey0'
+
+alias ls='exa -bg --icons --git'
+alias l='ls -laa'
+alias tree='ls -la --tree'
+

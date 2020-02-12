@@ -7,7 +7,7 @@ cd ~
 
 #install basic dependencies
 echo "installing basic dependencies"
-sudo yum install -y zsh git curl util-linux-user nano
+sudo yum install -y zsh git curl util-linux-user nano exa
 
 #install ohmyzsh
 echo "copying .oh-my-zsh file" 
