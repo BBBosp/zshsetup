@@ -10,8 +10,12 @@ echo "installing basic dependencies"
 sudo yum install -y zsh git curl util-linux-user nano exa
 
 #install ohmyzsh
-echo "copying .oh-my-zsh file" 
-cp -r ~/zshsetup/.oh-my-zsh ~/.oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+#this old method while convenient does not allow for updates and should not be used. 
+#echo "copying .oh-my-zsh file" 
+#cp -r ~/zshsetup/.oh-my-zsh ~/.oh-my-zsh
+
 
 #install powerlevel9k
 echo "cloning theme Powerlevel9k"
@@ -35,8 +39,8 @@ cp ~/zshsetup/.zshrc ~/.zshrc
 #git clone https://github.com/ryanoasis/nerd-fonts
 
 #run install script for nerd fonts
-echo "installing nerdfonts"
-./nerd-fonts/install.sh
+#echo "installing nerdfonts"
+#./nerd-fonts/install.sh
 
 #make zsh default shell
 echo "making zsh default shell"
